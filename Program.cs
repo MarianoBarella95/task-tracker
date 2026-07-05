@@ -16,7 +16,7 @@ else if(args[0] == "help")
     Console.WriteLine("Usage:");
     Console.WriteLine("1. add <description> - Adds a new task with the given description.");
     Console.WriteLine("2. list - Lists all tasks.");
-    Console.Write("3. list <description>  - Lists all tasks with the given description");
+    Console.Write("3. list <status>  - Lists all tasks with the given status");
     Console.WriteLine(" (todo, in-progress, done).");
     Console.WriteLine("5. update <id> <description> - Updates the description of the task with the given id.");
     Console.WriteLine("6. mark-in-progress <id>  - Marks the task with the given id as in progress.");
