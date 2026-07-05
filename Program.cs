@@ -4,12 +4,22 @@ using System.Security.Cryptography.X509Certificates;
 
 var fileName = "task.json";
 
-//int id = 1;
-
 if(args.Length == 0 || args.Length > 3)
 {
-    Console.WriteLine("Wrong usage. Please write an argument.");
+    Console.WriteLine("Wrong usage. Use the command \"help\" for more information.");
     return; 
+}
+else if(args[0] == "help")
+{
+    Console.WriteLine("Usage:");
+    Console.WriteLine("1. add <description> - Adds a new task with the given description.");
+    Console.WriteLine("2. list - Lists all tasks.");
+    Console.Write("3. list <description>  - Lists all tasks with the given description");
+    Console.WriteLine(" (todo, in-progress, done).");
+    Console.WriteLine("5. update <id> <description> - Updates the description of the task with the given id.");
+    Console.WriteLine("6. mark-in-progress <id>  - Marks the task with the given id as in progress.");
+    Console.WriteLine("7. mark-done <id>  - Marks the task with the given id as done.");
+    Console.WriteLine("8. delete <id>  - Deletes the task with the given id.");
 }
 else if (args[0] == "add" && args.Length == 2) 
 {
@@ -170,11 +180,19 @@ else if (args[0] == "add" && args.Length == 2)
     Task find = results.FirstOrDefault(x => x.Id == markId);
 
     if (args[0] == "mark-in-progress" && find != null)
-    {
+    {   
+        if (find.Status == Status.in_progress)
+        {
+            Console.WriteLine($"Task: {find.Description} is already marked as in progress.");
+        }
         find.Status = Status.in_progress;
         find.UpdatedAt = DateTime.Now;
     } else if(args[0] == "mark-done" && find != null)
-    {
+    {   
+        if(find.Status == Status.done)
+        {
+            Console.WriteLine($"Task: {find.Description} is already marked as done.");
+        }
         find.Status = Status.done;
         find.UpdatedAt = DateTime.Now;
     }
@@ -185,4 +203,7 @@ else if (args[0] == "add" && args.Length == 2)
     
     Console.WriteLine($"Task: {find.Description} marked as {find.Status}");
 
+} else
+{
+    Console.WriteLine("Wrong usage. Use the command \"help\" for more information.");
 }
