@@ -4,7 +4,9 @@ using System.Security.Cryptography.X509Certificates;
 
 var fileName = "task.json";
 
-if(args.Length == 0 || args.Length > 3)
+try
+{
+    if(args.Length == 0 || args.Length > 3)
 {
     Console.WriteLine("Wrong usage. Use the command \"help\" for more information.");
     return; 
@@ -206,4 +208,8 @@ else if (args[0] == "add" && args.Length == 2)
 } else
 {
     Console.WriteLine("Wrong usage. Use the command \"help\" for more information.");
+}    
+} catch (Exception e)
+{
+    Console.WriteLine($"Wrong usage. Use the command \"help\" for more information. Error: {e.Message}");
 }
