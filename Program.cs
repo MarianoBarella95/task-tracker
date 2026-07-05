@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 var fileName = "task.json";
 
@@ -59,16 +58,13 @@ else if (args[0] == "add" && args.Length == 2)
         }
         //add task to the list
         results.Add(task);
-        //serialize to Json
-        jsonString = JsonSerializer.Serialize(results);
-        //write the file
-        File.WriteAllText(fileName, jsonString);
+        writeList(results, fileName);
     }
 
 } else if (args[0] == "list" && args.Length <= 1)
 {   
-    string resultsJson = File.ReadAllText(fileName);  
-    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);
+    var results = getList(fileName);
+    
     if(results == null || results.Count == 0)
     {
         Console.WriteLine("No tasks found.");
@@ -83,8 +79,7 @@ else if (args[0] == "add" && args.Length == 2)
     
 } else if (args[0] == "list" && args.Length == 2)
 {   
-    string resultsJson = File.ReadAllText(fileName);  
-    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);
+    var results = getList(fileName);
     
     if(args[1] == "todo")
     {
@@ -131,8 +126,7 @@ else if (args[0] == "add" && args.Length == 2)
     }
 } else if (args[0] == "delete" && args.Length == 2)
 {
-    string resultsJson = File.ReadAllText(fileName);  
-    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);
+    var results = getList(fileName);
     int deleteId = Int32.Parse(args[1]);
     Task find = results.FirstOrDefault(x => x.Id == deleteId);
 
@@ -140,20 +134,15 @@ else if (args[0] == "add" && args.Length == 2)
     {   
         results.Remove(find);
         Console.WriteLine($"Task deleted successfully (ID: {args[1]})");
-        //serialize to Json
-        string jsonString = JsonSerializer.Serialize(results);
-        //write the file
-        File.WriteAllText(fileName, jsonString);
+        writeList(results, fileName);
     }
     else
     {
         Console.WriteLine($"No task with Id: {args[1]}");
     }
 } else if (args[0] == "update" && args.Length == 3)
-{
-    string resultsJson = File.ReadAllText(fileName);  
-    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);
-
+{   
+    var results = getList(fileName);
     int updateId = Int32.Parse(args[1]);
     Task find = results.FirstOrDefault(x => x.Id == updateId);
     
@@ -165,19 +154,15 @@ else if (args[0] == "add" && args.Length == 2)
         Console.WriteLine($"Task updated created at {find.CreatedAt})");
         Console.WriteLine($"Task updated updated at {find.UpdatedAt})");
 
-        //serialize to Json
-        string jsonString = JsonSerializer.Serialize(results);
-        //write the file
-        File.WriteAllText(fileName, jsonString);
+        writeList(results, fileName);
     }
     else
     {
         Console.WriteLine($"No task with Id: {args[1]}");
     }
 } else if(args[0] == "mark-in-progress" || args[0] == "mark-done" && args.Length == 2)
-{
-    string resultsJson = File.ReadAllText(fileName);  
-    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);   
+{   
+    var results = getList(fileName);
     int markId = Int32.Parse(args[1]);
     Task find = results.FirstOrDefault(x => x.Id == markId);
 
@@ -189,6 +174,7 @@ else if (args[0] == "add" && args.Length == 2)
         }
         find.Status = Status.in_progress;
         find.UpdatedAt = DateTime.Now;
+        Console.WriteLine($"Task: {find.Description} marked as {find.Status}");
     } else if(args[0] == "mark-done" && find != null)
     {   
         if(find.Status == Status.done)
@@ -197,13 +183,10 @@ else if (args[0] == "add" && args.Length == 2)
         }
         find.Status = Status.done;
         find.UpdatedAt = DateTime.Now;
+        Console.WriteLine($"Task: {find.Description} marked as {find.Status}");
     }
-        //serialize to Json
-        string jsonString = JsonSerializer.Serialize(results);
-        //write the file
-        File.WriteAllText(fileName, jsonString);
+        writeList(results, fileName);
     
-    Console.WriteLine($"Task: {find.Description} marked as {find.Status}");
 
 } else
 {
@@ -212,4 +195,19 @@ else if (args[0] == "add" && args.Length == 2)
 } catch (Exception e)
 {
     Console.WriteLine($"Wrong usage. Use the command \"help\" for more information. Error: {e.Message}");
+}
+
+//get the list of tasks from the file
+List<Task>? getList(string fileName)
+{
+    string resultsJson = File.ReadAllText(fileName);  
+    List<Task>? results = JsonSerializer.Deserialize<List<Task>>(resultsJson);   
+    return results;
+}
+
+//write the list of tasks to the file
+void writeList(List<Task> results, string fileName)
+{
+    string jsonString = JsonSerializer.Serialize(results);
+    File.WriteAllText(fileName, jsonString);
 }
