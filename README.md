@@ -3,7 +3,7 @@
 This is Task Tracker, a CLI application that allows you to maintain a lists of tasks, and perform CRUD operations on them.
 
 ## Quicstart
-First of all, you must have installed the .NET SDK.
+First of all, you must have installed the .NET SDK. You can download it from here https://dotnet.microsoft.com/es-es/download
 
 - Clone the project: `git clone https://github.com/MarianoBarella95/task-tracker.git`
 - Go to the project folder: `cd task-tracker`
