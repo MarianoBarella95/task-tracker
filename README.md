@@ -1,6 +1,6 @@
 # Task Tracker
 
-This is Task Tracker, a CLI application that allows you to maintain a lists of tasks, and perform CRUD operations on them.
+This is Task Tracker, a CLI application that allows you to maintain a lists of tasks, and perform CRUD operations on them. This project is part of the Backend Roadmap in roadmap.sh [https://roadmap.sh/projects/task-tracker].
 
 ## Quicstart
 First of all, you must have installed the .NET SDK. You can download it from here https://dotnet.microsoft.com/es-es/download
